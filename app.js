@@ -7,9 +7,10 @@ var Parse = require('parse').Parse;
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var api = require('./api');
+var api = require('./api/router');
 
 var app = express();
+app.set('title', 'GoVip');
 
 // all environments
 app.set('port', process.env.PORT || 3000);

@@ -31,9 +31,11 @@ ApiRouter.prototype.bindGetRoute = function(route, app) {
 
 	try {
 
-		var index_path = './' + route;
-		var get_path = './' + route + '/get';
-		var post_path = './' + route + '/post';
+		var index_path = './' + route + '/index.js';
+		var get_path = './' + route + '/get.js';
+		var post_path = './' + route + '/post.js';
+
+		var indexIsSet = false;
 
 		// Index path
 		if (fs.existsSync(path.join(__dirname, index_path))) {
@@ -60,7 +62,7 @@ ApiRouter.prototype.bindGetRoute = function(route, app) {
 			indexIsSet = true;
 
 			var r = this.prepareFullRoute(route);
-			app.post(r, require(get_path));
+			app.post(r, require(post_path));
 		}
 
 	} catch(e) {
