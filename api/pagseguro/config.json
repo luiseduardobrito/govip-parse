@@ -1,0 +1,10 @@
+{
+	"pagseguro": {
+		"email": "luiseduardo14@gmail.com",
+		"token": "XXXXXXXXXXXXXXXXXXXX",
+		"currency": "BRL",
+		"extra": 0.13,
+		"redirectURL": "http://www.govipclub.com.br",
+		"notificationURL": "http://www.govipclub.com.br/api/pagseguro/notify"
+	}
+}

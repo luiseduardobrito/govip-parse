@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "_default": {
+            "link": "govip"
+        }, 
+        "govip": {
+            "applicationId": "GL1SDhT31Mf1r6uizWHOTXCuM4Mc4uPGWvcNL0eP", 
+            "masterKey": "l5ysn0TIi6R5wwEBVMOyOMFKVPSkPPn2wLFPWNna"
+        }
+    }
+}
