@@ -8,7 +8,7 @@ var token = function() {
 
 var BeforeSave = function(request, response) {
 	request.object.set('token', token());
-	response.success();
+	return response.success();
 }
 
 Parse.Cloud.beforeSave(Parse.User, BeforeSave);

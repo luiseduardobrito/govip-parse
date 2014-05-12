@@ -5,15 +5,15 @@ function random (low, high) {
 var BeforeSave = function(request, response) {
 
 	if (!request.object.get("buyer")) {
-		response.error("You have to specify the buyer user");
+		return response.error("You have to specify the buyer user");
 	} 
 
 	else if (!request.object.get("total") || request.object.get("total") <= 0) {
-		response.error("You have to specify a valid total value");
+		return response.error("You have to specify a valid total value");
 	}
 
 	else if(!request.object.get("items")) {
-		response.error("You have to specify a valid items list");
+		return response.error("You have to specify a valid items list");
 	}
 
 	else {
@@ -26,7 +26,7 @@ var BeforeSave = function(request, response) {
 		// TODO: place order in payment gateway
 
 		// Return result
-		response.success();
+		return response.success();
 	}
 }
 
