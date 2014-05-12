@@ -6,7 +6,10 @@ var token = function() {
     return rand() + rand(); // to make it longer
 };
 
-Parse.Cloud.beforeSave(Parse.User, function(request, response) {
+var BeforeSave = function(request, response) {
 	request.object.set('token', token());
 	response.success();
-});
+}
+
+Parse.Cloud.beforeSave(Parse.User, BeforeSave);
+exports = BeforeSave;

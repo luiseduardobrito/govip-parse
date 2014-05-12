@@ -2,7 +2,7 @@ function random (low, high) {
 	return Math.random() * (high - low) + low;
 }
 
-Parse.Cloud.beforeSave("Order", function(request, response) {
+var BeforeSave = function(request, response) {
 
 	if (!request.object.get("buyer")) {
 		response.error("You have to specify the buyer user");
@@ -16,4 +16,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
 		request.object.set('smsCode', random(1000, 10000));
 		response.success();
 	}
-});
+}
+
+Parse.Cloud.beforeSave("Order", BeforeSave);
+exports = BeforeSave;
