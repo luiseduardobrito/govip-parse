@@ -18,8 +18,8 @@ var BeforeSave = function(request, response) {
 
 	else {
 
-		// Create new sms code
-		request.object.set('smsCode', random(1000, 10000));
+		// Set confirmed flag
+		request.object.set("confirmed", false);
 
 		// TODO: generate tickets
 
