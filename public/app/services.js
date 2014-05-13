@@ -102,7 +102,7 @@ Services("$user", ['$Parse', function($Parse) {
 			fn = fn || function(){};
 
 			// Perform facebook login
-			$Parse.FacebookUtils.logIn(null, {
+			$Parse.FacebookUtils.logIn("public_profile,email,user_friends", {
 
 				success: function(user) {
 					(fn.success ? fn.success(user) : fn(null, user));
