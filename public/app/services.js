@@ -131,6 +131,7 @@ Services("$user", ['$Parse', function($Parse) {
 							});
 						}
 
+						(fn.success ? fn.success(user) : fn(null, user));
 					})
 				},
 
