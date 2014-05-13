@@ -17,12 +17,12 @@ var PaymentGatewayCloud = function() {
 
 PaymentGatewayCloud.prototype.setOrder = function(order) {
 
-	// Save information instance
-	this.order = order;
-	this.buyer = order.get("buyer");
+	// Set order id reference
+	this.gateway.setReference(order.get("objectId"));
 
-	// TODO: fill gateway with order info
-	return;
+	// Set buyer user instance
+	// Required user fields: name, email
+	this.gateway.setBuyer(order.get("buyer"));
 }
 
 PaymentGatewayCloud.prototype.send = function(fn) {

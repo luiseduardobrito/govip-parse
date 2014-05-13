@@ -1,4 +1,9 @@
-function random (low, high) {
+var Ticket = require('cloud/ticket/model.js');
+var Attendee = require('cloud/attendee/model.js');
+
+var PaymentGateway = require('cloud/payment/main.js');
+
+var random = function(low, high) {
 	return Math.random() * (high - low) + low;
 }
 
@@ -20,10 +25,7 @@ var BeforeSave = function(request, response) {
 
 		// Set confirmed flag
 		request.object.set("confirmed", false);
-
-		// TODO: generate tickets
-
-		// TODO: place order in payment gateway
+		request.object.set("closed", false);
 
 		// Return result
 		return response.success();

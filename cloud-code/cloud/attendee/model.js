@@ -1,0 +1,1 @@
+exports = Parse.Object.extend("Attendee");

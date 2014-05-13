@@ -29,5 +29,5 @@ PaymentCloud.prototype.create = function(request, response) {
 };
 
 var payment = new PaymentCloud;
-Parse.Cloud.define("paymentGateway", payment.create);
+Parse.Cloud.define("PaymentGateway", payment.create);
 exports = payment;
