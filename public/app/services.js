@@ -18,10 +18,10 @@ Services("$user", ['$Parse', function($Parse) {
 
 			Parse.FacebookUtils.init({
 				appId      : '623325864408977', // Facebook App ID
-				channelUrl : '//govip.parseapp.com/channel.html', // Channel File
 				status     : true, // check login status
 				cookie     : true, // enable cookies to allow Parse to access the session
-				xfbml      : true  // parse XFBML
+				xfbml      : true,  // parse XFBML
+				version    : 'v2.0'
 			});
 		};
 
