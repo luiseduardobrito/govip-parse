@@ -15,13 +15,8 @@ Services("$user", ['$Parse', function($Parse) {
 	_this.init = function() {
 
 		window.fbAsyncInit = function() {
-
 			Parse.FacebookUtils.init({
-				appId      : '623325864408977', // Facebook App ID
-				status     : true, // check login status
-				cookie     : true, // enable cookies to allow Parse to access the session
-				xfbml      : true,  // parse XFBML
-				version    : 'v2.0'
+				appId: '623325864408977'
 			});
 		};
 
@@ -29,7 +24,7 @@ Services("$user", ['$Parse', function($Parse) {
 			var js, fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) {return;}
 			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/en_US/sdk.js";
+			js.src = "//connect.facebook.net/en_US/all.js";
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 
