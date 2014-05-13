@@ -3,16 +3,12 @@ var DATE_ZERO = 0;
 
 var Services = angular.module("go.services", []).factory;
 
-Services("$FB", [function() {
-	return FB;
-}]);
-
 Services("$Parse", [function() {
 	Parse.initialize("GL1SDhT31Mf1r6uizWHOTXCuM4Mc4uPGWvcNL0eP", "Y6SVRS3W0PSMWWO0mS6wJ2XlVo728UC6MBhwaWB0");
 	return Parse;
 }]);
 
-Services("$user", ['$Parse', '$FB', function($Parse, $FB) {
+Services("$user", ['$Parse', function($Parse) {
 
 	var User = $Parse.User.extend({
 	
@@ -62,13 +58,7 @@ Services("$user", ['$Parse', '$FB', function($Parse, $FB) {
 				user.signUp(null, {
 
 					success: function(user) {
-
-						$FB.api("/me", {
-							access_token: token: user.get("authData").facebook.access_token
-						}, function(me) {
-							console.log(me);
-							(fn.success ? fn.success(user) : fn(null, user));
-						})
+						(fn.success ? fn.success(user) : fn(null, user));
 					},
 
 					error: function(user, error) {
@@ -115,8 +105,33 @@ Services("$user", ['$Parse', '$FB', function($Parse, $FB) {
 			$Parse.FacebookUtils.logIn("public_profile,email,user_friends", {
 
 				success: function(user) {
-					console.log(user);
-					(fn.success ? fn.success(user) : fn(null, user));
+
+					FB.api("/me", {
+
+						access_token: user.get("authData").facebook.access_token
+
+					}, function(me) {
+
+						if(!user.existed()) {
+
+							var info = {
+								name: me.name,
+								email: me.email
+							};
+
+							user.save(info, {
+
+								success: function(_user) {
+									(fn.success ? fn.success(_user) : fn(null, _user));
+								},
+
+								error: function(_error) {
+									(fn.error ? fn.error(_error) : fn(_error));
+								}
+							});
+						}
+
+					})
 				},
 
 				error: function(user, error) {
