@@ -12,11 +12,15 @@
                     </div>
                 </div>
 
-              <div class="required-field-block">
+                <div class="required-field-block">
                     <input type="password" placeholder="Senha" class="form-control input-auth" ng-model="password">
                     <div class="required-icon">
                         <div class="text">*</div>
                     </div>
+                </div>
+
+                <div class="required-field-block">
+                    <a href="javascript:void(0);" ng-click="resetPassword()">Esqueci minha senha</a>
                 </div>
 
                 <button class="btn btn-auth" ng-click="login()">Entrar</button>

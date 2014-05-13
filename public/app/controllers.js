@@ -253,6 +253,26 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 		})
 	}
 
+	$scope.resetPassword = function() {
+
+		var email = prompt("Digite seu email:", "Esqueci minha senha");
+
+		if (email != null) {
+
+			$user.resetPassword(email, {
+
+				success: function() {
+					alert("Você receberá um email em breve!");
+				},
+
+				error: function(error) {
+					alert("Erro!");
+					console.log(error);
+				}
+			});
+		}
+	}
+
 	// $scope.getCurrentUser = function() {
 	// 	return $user.me();
 	// }

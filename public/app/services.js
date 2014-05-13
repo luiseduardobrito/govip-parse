@@ -109,6 +109,22 @@ Services("$user", ['$Parse', function($Parse) {
 					(fn.error ? fn.error(error) : fn(error));
 				}
 			});
+		},
+
+		resetPassword: function(email, fn) {
+
+			fn = fn || function(){};
+
+			$Parse.User.requestPasswordReset(email, {
+
+				success: function() {
+					(fn.success ? fn.success() : fn(), else fn())
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(), else fn(error))
+				}
+			});
 		}
 	});
 
