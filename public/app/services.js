@@ -13,7 +13,43 @@ Services("$user", ['$Parse', function($Parse) {
 	_this.me = null;
 
 	_this.init = function() {
+
+		window.fbAsyncInit = function() {
+
+			Parse.FacebookUtils.init({
+				appId      : '623325864408977', // Facebook App ID
+				channelUrl : '//govip.parseapp.com/channel.html', // Channel File
+				status     : true, // check login status
+				cookie     : true, // enable cookies to allow Parse to access the session
+				xfbml      : true  // parse XFBML
+			});
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
 		return _public;
+	}
+
+	_public.facebookLogin = function() {
+		
+		Parse.FacebookUtils.logIn(null, {
+			success: function(user) {
+				if (!user.existed()) {
+					alert("User signed up and logged in through Facebook!");
+				} else {
+					alert("User logged in through Facebook!");
+				}
+			},
+			error: function(user, error) {
+				alert("User cancelled the Facebook login or did not fully authorize.");
+			}
+		});
 	}
 
 	return _this.init();

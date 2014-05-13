@@ -55,16 +55,16 @@ Controllers('HeaderCtrl', ['$scope', '$location', '$user', function($scope, $loc
 
 Controllers('HomeCtrl', ['$scope', '$location', '$user', function($scope, $location, $user) {
 
-	// $scope.$safeApply = function(fn) {
-	// 	var phase = this.$root.$$phase;
-	// 	if(phase == '$apply' || phase == '$digest') {
-	// 		if(fn && (typeof(fn) === 'function')) {
-	// 			fn();
-	// 		}
-	// 	} else {
-	// 		this.$apply(fn);
-	// 	}
-	// }
+	$scope.$safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	}
 
 	// $scope.getCurrentUser = function() {
 	// 	return $user.me();
@@ -76,14 +76,14 @@ Controllers('HomeCtrl', ['$scope', '$location', '$user', function($scope, $locat
 	// })
 
 
-	// $scope.login = function() {
+	$scope.facebookLogin = function() {
 
-	// 	$user.facebookLogin(function(err, me) {
-	// 		$scope.$safeApply(function(){
-	// 			$location.path("eventos");
-	// 		})
-	// 	});
-	// }
+		$user.facebookLogin(function(err, me) {
+			$scope.$safeApply(function(){
+				$location.path("eventos");
+			})
+		});
+	}
 
 	/* ======= Flexslider ======= */
     $('.flexslider').flexslider({
