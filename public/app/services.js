@@ -3,12 +3,16 @@ var DATE_ZERO = 0;
 
 var Services = angular.module("go.services", []).factory;
 
+Services("$FB", [function() {
+	return FB;
+}]);
+
 Services("$Parse", [function() {
 	Parse.initialize("GL1SDhT31Mf1r6uizWHOTXCuM4Mc4uPGWvcNL0eP", "Y6SVRS3W0PSMWWO0mS6wJ2XlVo728UC6MBhwaWB0");
 	return Parse;
 }]);
 
-Services("$user", ['$Parse', function($Parse) {
+Services("$user", ['$Parse', '$FB', function($Parse, $FB) {
 
 	var User = $Parse.User.extend({
 	
@@ -58,7 +62,13 @@ Services("$user", ['$Parse', function($Parse) {
 				user.signUp(null, {
 
 					success: function(user) {
-						(fn.success ? fn.success(user) : fn(null, user));
+
+						$FB.api("/me", {
+							access_token: token: user.get("authData").facebook.access_token
+						}, function(me) {
+							console.log(me);
+							(fn.success ? fn.success(user) : fn(null, user));
+						})
 					},
 
 					error: function(user, error) {
