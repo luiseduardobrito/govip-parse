@@ -7,7 +7,13 @@ var token = function() {
 };
 
 var BeforeSave = function(request, response) {
+
 	request.object.set('token', token());
+
+	if(!request.object.get('emailVerified')) {
+		request.object.set('emailVerified', false);
+	}
+
 	return response.success();
 }
 

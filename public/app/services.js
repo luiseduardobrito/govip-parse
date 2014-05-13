@@ -7,59 +7,99 @@ Services("$Parse", [function() {
 
 Services("$user", ['$Parse', function($Parse) {
 
-	var _this = this;
-	var _public = {};
+	var User = $Parse.User.extend({
+	
+		// Instance methods
+		initialize: function (attrs, options) {
+			return;
+		}
 
-	_this.me = null;
+	}, {
 
-	_this.init = function() {
+		// Class methods
+		me: function(fn) {
+			return $Parse.User.current();
+		},
 
-		window.fbAsyncInit = function() {
-			Parse.FacebookUtils.init({
-				appId: '623325864408977'
-			});
-		};
+		logout: function() {
+			$Parse.User.logOut();
+		},
 
-		(function(d, s, id){
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) {return;}
-			js = d.createElement(s); js.id = id;
-			js.src = "//connect.facebook.net/en_US/all.js";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
+		signup: function(opt, fn) {
 
-		return _public;
-	}
-
-	_public.facebookLogin = function() {
-		
-		Parse.FacebookUtils.logIn(null, {
-
-			success: function(user) {
-				(fn.success ? fn.success(user) : fn(null, user));
-			},
-
-			error: function(user, error) {
-				(fn.error ? fn.error(error) : fn(error));
+			if(!opt.name) {
+				fn(new Error("User name not defined"));
 			}
-		});
-	}
 
-	_public.login = function(opt, fn) {
+			else if(!opt.email) {
+				fn(new Error("User email not defined"));
+			}
 
-		fn = fn || function(){};
+			else if(!opt.password) {
+				fn(new Error("User password not defined"));
+			}
 
-		if(!opt.email) {
-			fn(new Error("User email not defined"));
-		}
+			else {
 
-		else if(!opt.password) {
-			fn(new Error("User password not defined"));
-		}
+				var user = new $Parse.User();
 
-		else {
+				// Login information
+				user.set("username", opt.email);
+				user.set("password", opt.password);
 
-			Parse.User.logIn(opt.email, opt.password, {
+				// User information
+				user.set("name", opt.name);
+				user.set("email", opt.email);
+				
+				// Perform signup			
+				user.signUp(null, {
+
+					success: function(user) {
+						(fn.success ? fn.success(user) : fn(null, user));
+					},
+
+					error: function(user, error) {
+						(fn.error ? fn.error(error) : fn(error));
+					}
+				});
+			}
+
+		},
+
+		login: function(opt, fn) {
+
+			fn = fn || function(){};
+
+			if(!opt.email) {
+				fn(new Error("User email not defined"));
+			}
+
+			else if(!opt.password) {
+				fn(new Error("User password not defined"));
+			}
+
+			else {
+
+				// Perform user login
+				Parse.User.logIn(opt.email, opt.password, {
+
+					success: function(user) {
+						(fn.success ? fn.success(user) : fn(null, user));
+					},
+
+					error: function(user, error) {
+						(fn.error ? fn.error(error) : fn(error));
+					}
+				});
+			}
+		},
+
+		facebookLogin: function(fn) {
+
+			fn = fn || function(){};
+
+			// Perform facebook login
+			$Parse.FacebookUtils.logIn(null, {
 
 				success: function(user) {
 					(fn.success ? fn.success(user) : fn(null, user));
@@ -70,10 +110,23 @@ Services("$user", ['$Parse', function($Parse) {
 				}
 			});
 		}
-	}
+	});
 
-	return _this.init();
+	window.fbAsyncInit = function() {
+		Parse.FacebookUtils.init({
+			appId: '623325864408977'
+		});
+	};
 
+	(function(d, s, id){
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+	return User;
 }]);
 
 Services("$order", ["$Parse", function($Parse) {

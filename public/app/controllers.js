@@ -212,9 +212,7 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 				$scope.$safeApply(function(){
 
 					alert("Bem vindo, " + me.get("name") + "!");
-
 					console.log(me);
-
 
 					$location.path("eventos");
 				})
@@ -225,6 +223,34 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 				alert("Erro!");
 			}
 		});
+	}
+
+	$scope.signup = function() {
+
+		$user.signup({
+
+			name: $scope.signup_name + " " + $scope.signup_lastname,
+			email: $scope.signup_email,
+			password: $scope.signup_password
+
+		}, {
+
+			success: function(me) {
+				
+				$scope.$safeApply(function(){
+
+					alert("Bem vindo, " + me.get("name") + "!");
+					console.log(me);
+
+					$location.path("eventos");
+				})
+			},
+
+			error: function(err) {
+				console.log(err);
+				alert("Erro!")
+			}
+		})
 	}
 
 	// $scope.getCurrentUser = function() {
