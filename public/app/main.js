@@ -34,11 +34,6 @@ go.config(['$routeProvider', '$locationProvider', function($routeProvider, $loca
 				controller: 'ListCtrl'
 			})
 
-			.when('/conta', {
-				templateUrl: 'views/email.html', 
-				controller: 'EmailCtrl'
-			})
-
 			.when('/carrinho/:id', {
 				templateUrl: 'views/order.html', 
 				controller: 'OrderCtrl'

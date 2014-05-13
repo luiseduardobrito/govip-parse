@@ -1,70 +1,11 @@
 var Services = angular.module("go.services", []).factory;
 
-Services("$dpd", [function() {
-	return dpd;
-}]);
-
-Services("parse", [function() {
+Services("$Parse", [function() {
 	Parse.initialize("GL1SDhT31Mf1r6uizWHOTXCuM4Mc4uPGWvcNL0eP", "Y6SVRS3W0PSMWWO0mS6wJ2XlVo728UC6MBhwaWB0");
 	return Parse;
 }]);
 
-Services("$fb", [function() {
-
-	var _this = this;
-	var _public = {};
-
-	_this.token = "";
-
-	_this.init = function() {
-
-	window.fbAsyncInit = function() {
-    	FB.init({
-        	appId      : '623325864408977',
-			status     : true,
-			xfbml      : true
-		});
-	};
-
-	(function(d, s, id){
-		var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/en_US/all.js";
-		fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
-
-		return _public;
-	}
-
-	_public.login = function(fn) {
-
-		FB.login(function(response) {
-
-			if(response && response.status === "connected") {
-				
-				_this.token = response.authResponse.accessToken;
-
-				FB.api("/me", function(me) {
-					_this.me = me;
-					fn(me);
-				});
-			}
-		}, {scope: 'email,rsvp_event,user_events'});
-	}
-
-	_public.me = function() {
-		return _this.me || {};
-	}
-
-	_public.token = function() {
-		return _this.token;
-	}
-
-	return _this.init();
-}])
-
-Services("$user", ['$dpd', '$fb', function($dpd, $fb) {
+Services("$user", ['$Parse', function($Parse) {
 
 	var _this = this;
 	var _public = {};
@@ -174,7 +115,7 @@ Services("$user", ['$dpd', '$fb', function($dpd, $fb) {
 
 }]);
 
-Services("$order", ['$dpd', function($dpd) {
+Services("$order", [$Parse, function($Parse) {
 
 	var _this = this;
 	var _public = {};
@@ -237,7 +178,7 @@ Services("$order", ['$dpd', function($dpd) {
 	return _public;
 }])
 
-Services("$event", ["$dpd", function($dpd){
+Services("$event", ["$Parse", function($Parse){
 
 	var _this = this;
 	var _public = {};
