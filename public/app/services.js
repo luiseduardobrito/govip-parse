@@ -115,7 +115,7 @@ Services("$user", ['$Parse', function($Parse) {
 
 }]);
 
-Services("$order", [$Parse, function($Parse) {
+Services("$order", ["$Parse", function($Parse) {
 
 	var _this = this;
 	var _public = {};
