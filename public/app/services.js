@@ -105,6 +105,7 @@ Services("$user", ['$Parse', function($Parse) {
 			$Parse.FacebookUtils.logIn("public_profile,email,user_friends", {
 
 				success: function(user) {
+					console.log(user);
 					(fn.success ? fn.success(user) : fn(null, user));
 				},
 
