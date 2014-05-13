@@ -118,11 +118,11 @@ Services("$user", ['$Parse', function($Parse) {
 			$Parse.User.requestPasswordReset(email, {
 
 				success: function() {
-					(fn.success ? fn.success() : fn(), else fn())
+					(fn.success ? fn.success() : fn())
 				},
 
 				error: function(error) {
-					(fn.error ? fn.error(error) : fn(), else fn(error))
+					(fn.error ? fn.error(error) : fn(error))
 				}
 			});
 		}
@@ -138,37 +138,21 @@ Services("$user", ['$Parse', function($Parse) {
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) {return;}
 		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/en_US/all.js";
+		js.src = '//connect.facebook.net/en_US/all.js';
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
 	return User;
 }]);
 
-Services("$order", ["$Parse", function($Parse) {
+Services('$order', ['$Parse', function($Parse) {
+	return $Parse.Object.extend('Orcer');
+}]);
 
-	var _this = this;
-	var _public = {};
+Services('$ticket', ['$Parse', function($Parse) {
+	return $Parse.Object.extend('Ticket');
+}]);
 
-	_this.me = null;
-
-	_this.init = function() {
-		return _public;
-	}
-
-	return _this.init();
-}])
-
-Services("$event", ["$Parse", function($Parse){
-
-	var _this = this;
-	var _public = {};
-
-	_this.me = null;
-
-	_this.init = function() {
-		return _public;
-	}
-
-	return _this.init();
+Services('$event', ['$Parse', function($Parse){
+	return $Parse.Object.extend('Event');
 }]);
