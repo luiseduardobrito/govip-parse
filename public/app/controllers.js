@@ -1,3 +1,4 @@
+
 var Controllers = angular.module("go.controllers", []).controller;
 
 Controllers('HeaderCtrl', ['$scope', '$location', '$user', function($scope, $location, $user) {
@@ -513,18 +514,51 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$order', '$locati
 
 Controllers('ListCtrl', ['$scope', '$user', '$event', '$location', function($scope, $user, $event, $location) {
 
-	// $scope.safeApply = function(fn) {
+	$scope.safeApply = function(fn) {
 
-	// 	var phase = this.$root.$$phase;
+		var phase = this.$root.$$phase;
 
-	// 	if(phase == '$apply' || phase == '$digest') {
-	// 		if(fn && (typeof(fn) === 'function')) {
-	// 			fn();
-	// 		}
-	// 	} else {
-	// 		this.$apply(fn);
-	// 	}
-	// };
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	};
+
+	$event.getList({
+
+		success: function(list) {
+			$scope.safeApply(function(){
+
+				$scope.events = [];
+				
+				for(var i = 0; i < list.length; i++) {
+
+					var pos = $scope.events.push(list[i].attributes) - 1;
+
+					$scope.events[pos].displayDate = list[i].getDisplayDate();
+
+					$scope.events[pos].available = list[i].isAvailable({
+						success: function(result) {
+							$scope.safeApply(function(){
+								$scope.events[pos].available = result;
+							})
+						},
+						error: function(err) {
+							console.log(err)
+						}
+					});
+				}
+			})
+		},
+
+		error: function(error) {
+			alert("Erro!");
+			console.log(error);
+		}
+	})
 
 	// $event.list(function(err, list) {
 	// 	$scope.safeApply(function(){

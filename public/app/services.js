@@ -1,3 +1,6 @@
+var DATE_INFINITY = 150000000000000;
+var DATE_ZERO = 0;
+
 var Services = angular.module("go.services", []).factory;
 
 Services("$Parse", [function() {
@@ -145,14 +148,106 @@ Services("$user", ['$Parse', function($Parse) {
 	return User;
 }]);
 
+Services('$item', ['$Parse', function($Parse) {
+
+	var Item = $Parse.Object.extend('Item', {
+
+		isAvailable: function() {
+			var n = Date.now();
+			var s = (new Date(this.get("startDate") || DATE_INFINITY)).getTime();
+			var e = (new Date(this.get("endDate") || DATE_ZERO)).getTime();
+			return (n >= s) && (n <= e);
+		}
+
+	}, {
+
+		findByEvent: function(e, fn) {
+
+			fn = fn || function(){};
+
+			var query = new $Parse.Query(Item);
+			query.equalTo('event', e);
+
+			query.find({
+
+				success: function(list) {
+					(fn.success ? fn.success(list) : fn(null, list));
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(error));
+				}
+			});
+		}
+
+	});
+
+	return Item;
+
+}]);
+
+Services('$event', ['$Parse', '$item', function($Parse, $item){
+	
+	var Event = $Parse.Object.extend('Event', {
+
+		isAvailable: function(fn) {
+
+			$item.findByEvent(this, {
+
+				success: function(list) {
+
+					var result = false;
+
+					for(var i = 0; i < list.length; i++) {
+
+						if(list[i].isAvailable()) {
+							result = true;
+							break;
+						}
+					}
+
+					(fn.success ? fn.success(result) : fn(null, result));
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(error, nul));
+				}
+			});
+
+			return false;
+		},
+
+		getDisplayDate: function() {
+			return moment(this.get('date')).format('ddd, hA');
+		}
+
+	}, {
+
+		getList: function(fn) {
+			
+			fn = fn || function(){};
+			var query = new Parse.Query(Event);
+
+			query.find({
+
+				success: function(results) {
+					(fn.success ? fn.success(results) : fn(null, results));
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(error));
+				}
+			});
+		}
+	});
+
+	return Event;
+}]);
+
 Services('$order', ['$Parse', function($Parse) {
-	return $Parse.Object.extend('Orcer');
+	return $Parse.Object.extend('Order');
 }]);
 
 Services('$ticket', ['$Parse', function($Parse) {
 	return $Parse.Object.extend('Ticket');
-}]);
-
-Services('$event', ['$Parse', function($Parse){
-	return $Parse.Object.extend('Event');
 }]);
