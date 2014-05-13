@@ -1,0 +1,61 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-1 col-md-4 col-md-offset-1">
+            <form role="form" class="form-auth">
+                <h2 class="auth-title">Já é cliente GoVip?</h2>
+                
+                <div class="required-field-block">
+                    <input type="text" placeholder="Email" class="form-control input-auth" ng-model="email">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+
+              <div class="required-field-block">
+                    <input type="password" placeholder="Senha" class="form-control input-auth" ng-model="password">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-auth" ng-click="auth()">Entrar</button>
+            </form>
+        </div>
+
+        <div class="col-xs-12 col-sm-5 col-md-4 col-md-offset-2">
+            <form role="form" class="form-auth">
+                <h2 class="auth-title">Cadastre-se agora!</h2>
+                
+                <div class="required-field-block">
+                    <input type="text" placeholder="Nome" class="form-control input-auth" ng-model="signup_name">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+
+                <div class="required-field-block">
+                    <input type="text" placeholder="Sobrenome" class="form-control input-auth" ng-model="signup_lastname">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+                
+                <div class="required-field-block">
+                    <input type="text" placeholder="Email" class="form-control input-auth" ng-model="signup_email">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+
+                <div class="required-field-block">
+                    <input type="password" placeholder="Senha" class="form-control input-auth" ng-model="signup_password">
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+                <button class="btn btn-auth" ng-click="signup()">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</div>

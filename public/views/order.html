@@ -1,0 +1,87 @@
+<section class="section offset-header" style="margin-bottom: 100px">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 col-xs-12">
+				<div class="cart panel panel-default">
+					<div class="panel-heading">
+						<div class="panel-title">
+							<div class="row">
+								<div class="col-xs-12">
+									<h2 class="cart-title"><span class="fa fa-ticket"></span> Ingressos</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+
+					<div class="add-item-container">
+						<div class="row">
+							<h4 class="cart-subtitle" ng-bind="evnt.title"></h4>
+						</div>
+						<div class="row">
+							<form ng-submit="addItemToCart()">
+								<div class="col-xs-12 col-md-3">
+									<select class="add-item-option" name="ticketType" id="ticket-type" ng-model="addItemId" ng-change="addItemChange()">
+										<option ng-repeat="item in availableItems" value="{{ item.id }}" ng-bind="item.description"></option>
+									</select>
+								</div>
+								<div class="col-xs-12 col-md-3">
+									<input type="text" class="form-control input-sm add-item-input" placeholder="Nome Completo" ng-model="addItemUser.name" ng-required="true">
+								</div>
+								<div class="col-xs-12 col-md-3">
+									<input type="text" class="form-control input-sm add-item-input" placeholder	="R.G." ng-model="addItemUser.rg" ng-required="true">
+								</div>
+								<div class="col-xs-9 col-md-2">
+									<h6>R$ <span ng-bind="addItem.value.toFixed(2)"></span></h6>
+								</div>
+								<div class="col-xs-3 col-md-1 text-left">
+									<button type="submit" class="btn btn-add-item"><span class="fa fa-plus" style="margin-right:0;"></span></button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="row" ng-repeat-start="item in items track by $index">
+							<div class="col-xs-8">
+								<h4 class="product-name">
+									<strong ng-bind="item.description"></strong><br /><br />
+									<span ng-bind="getUserLabel(item)" style="margin-top: 5px"></span>
+								</h4>
+
+								<h4>
+									<small ng-bind="item.event.title"></small><br/>
+								</h4>
+							</div>
+							<div class="col-xs-4">
+								<div class="col-xs-10">
+									<h4 class="text-cost">R$<strong ng-bind="item.value"><span class="text-muted">x</span></strong></h4>
+								</div>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-xs btn-delete-item" ng-click="deleteItem(item)">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<hr ng-repeat-end>
+					</div>
+
+					<div class="panel-footer">
+						<div class="row text-center">
+							<div class="col-xs-12 col-md-5">
+								<button type="button" class="btn btn-buy-more" ng-goto="eventos">Comprar outro Evento
+								</button>
+							</div>
+							<div class="col-xs-12 col-md-5">
+								<h4 class="text-cost">Total: <strong ng-cloak>R$ {{ getTotalValue().toFixed(2) }}</strong> &nbsp; + &nbsp; Taxas</h4>
+							</div>
+							<div class="col-xs-12 col-md-2">
+								<button type="button" class="btn {{ getButtonClass() }}" ng-click="placeOrder()" ng-bind="getButtonLabel()"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
