@@ -1,3 +1,5 @@
+var x2js = require('cloud/payment/lib/xml2json.js');
+
 var PagSeguroGateway = function(config) {
 
 	if(config.email) {

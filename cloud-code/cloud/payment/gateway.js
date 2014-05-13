@@ -1,4 +1,4 @@
-var PagSeguro = require('cloud/payment/pagseguro.js');
+var PagSeguro = require('cloud/payment/lib/pagseguro.js');
 var config = require('cloud/payment/config.js');
 
 var PaymentGatewayCloud = function() {
