@@ -75,16 +75,6 @@ Controllers('HomeCtrl', ['$scope', '$location', '$user', function($scope, $locat
 	// 		$scope.me = me;
 	// })
 
-
-	$scope.facebookLogin = function() {
-
-		$user.facebookLogin(function(err, me) {
-			$scope.$safeApply(function(){
-				$location.path("eventos");
-			})
-		});
-	}
-
 	/* ======= Flexslider ======= */
     $('.flexslider').flexslider({
         animation: "fade",
@@ -188,16 +178,54 @@ Controllers('HomeCtrl', ['$scope', '$location', '$user', function($scope, $locat
 
 Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user, $location) {
 
-	// $scope.$safeApply = function(fn) {
-	// 	var phase = this.$root.$$phase;
-	// 	if(phase == '$apply' || phase == '$digest') {
-	// 		if(fn && (typeof(fn) === 'function')) {
-	// 			fn();
-	// 		}
-	// 	} else {
-	// 		this.$apply(fn);
-	// 	}
-	// }
+	$scope.$safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	}
+
+	$scope.facebookLogin = function() {
+
+		$user.facebookLogin(function(err, me) {
+			$scope.$safeApply(function(){
+				console.log(me);
+				$location.path("eventos");
+			})
+		});
+	}
+
+	$scope.login = function() {
+
+		$user.login({
+
+			email: $scope.email,
+			password: $scope.password
+
+		}, {
+
+			success: function(me) {
+				$scope.$safeApply(function(){
+
+					alert("Bem vindo, " + me.get("name") + "!");
+
+					console.log(me);
+
+
+					$location.path("eventos");
+				})
+			},
+
+			error: function(err) {
+				console.log(err);
+				alert("Erro!");
+			}
+		});
+	}
 
 	// $scope.getCurrentUser = function() {
 	// 	return $user.me();

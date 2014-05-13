@@ -1,4 +1,5 @@
 #!/bin/sh
 
 cd public;
-python -m SimpleHTTPServer & cd ..;
+python -m SimpleHTTPServer;
+cd ..;

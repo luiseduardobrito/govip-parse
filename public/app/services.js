@@ -34,17 +34,42 @@ Services("$user", ['$Parse', function($Parse) {
 	_public.facebookLogin = function() {
 		
 		Parse.FacebookUtils.logIn(null, {
+
 			success: function(user) {
-				if (!user.existed()) {
-					alert("User signed up and logged in through Facebook!");
-				} else {
-					alert("User logged in through Facebook!");
-				}
+				(fn.success ? fn.success(user) : fn(null, user));
 			},
+
 			error: function(user, error) {
-				alert("User cancelled the Facebook login or did not fully authorize.");
+				(fn.error ? fn.error(error) : fn(error));
 			}
 		});
+	}
+
+	_public.login = function(opt, fn) {
+
+		fn = fn || function(){};
+
+		if(!opt.email) {
+			fn(new Error("User email not defined"));
+		}
+
+		else if(!opt.password) {
+			fn(new Error("User password not defined"));
+		}
+
+		else {
+
+			Parse.User.logIn(opt.email, opt.password, {
+
+				success: function(user) {
+					(fn.success ? fn.success(user) : fn(null, user));
+				},
+
+				error: function(user, error) {
+					(fn.error ? fn.error(error) : fn(error));
+				}
+			});
+		}
 	}
 
 	return _this.init();
