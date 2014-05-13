@@ -24,8 +24,9 @@ Services("$user", ['$Parse', function($Parse) {
 			return $Parse.User.current();
 		},
 
-		logout: function() {
+		logout: function(fn) {
 			$Parse.User.logOut();
+			fn();
 		},
 
 		signup: function(opt, fn) {

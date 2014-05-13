@@ -3,55 +3,55 @@ var Controllers = angular.module("go.controllers", []).controller;
 
 Controllers('HeaderCtrl', ['$scope', '$location', '$user', function($scope, $location, $user) {
 
-	// $scope.$safeApply = function(fn) {
-	// 	var phase = this.$root.$$phase;
-	// 	if(phase == '$apply' || phase == '$digest') {
-	// 		if(fn && (typeof(fn) === 'function')) {
-	// 			fn();
-	// 		}
-	// 	} else {
-	// 		this.$apply(fn);
-	// 	}
-	// }
+	$scope.$safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	}
 
-	// $scope.getCurrentUser = function() {
-	// 	return $user.me();
-	// }
+	$scope.getCurrentUser = function() {
+		return $user.me();
+	}
 
-	// $scope.$watch('getCurrentUser()', function(me) {
-	// 	$scope.$safeApply(function(){
-	// 		$scope.me = me;
-	// 	});
-	// });
+	$scope.$watch('getCurrentUser()', function(me) {
+		$scope.$safeApply(function(){
+			$scope.me = me;
+		});
+	});
 
-	// $scope.loggedButton = function() {
+	$scope.loggedButton = function() {
 
-	// 	if(!me) 
-	// 		return "";
+		if(!me) 
+			return "";
 
-	// 	else 
-	// 		return "none";
-	// }
+		else 
+			return "none";
+	}
 
-	// $scope.userButton = function() {
-	// 	if(me) return "";
-	// 	else return "none"
-	// }
+	$scope.userButton = function() {
+		if(me) return "";
+		else return "none"
+	}
 
-	// $scope.login = function() {
+	$scope.login = function() {
 
-	// 	$user.facebookLogin(function(err, me) {
-	// 		$scope.$safeApply(function(){
-	// 			$location.path("eventos");
-	// 		})
-	// 	});
-	// }
+		$user.facebookLogin(function(err, me) {
+			$scope.$safeApply(function(){
+				$location.path("eventos");
+			})
+		});
+	}
 
-	// $scope.logout = function() {
-	// 	$user.logout(function() {
-	// 		$location.path("");
-	// 	});
-	// }
+	$scope.logout = function() {
+		$user.logout(function() {
+			$location.path("");
+		});
+	}
 }]);
 
 Controllers('HomeCtrl', ['$scope', '$location', '$user', function($scope, $location, $user) {
@@ -274,14 +274,14 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 		}
 	}
 
-	// $scope.getCurrentUser = function() {
-	// 	return $user.me();
-	// }
+	$scope.getCurrentUser = function() {
+		return $user.me();
+	}
 
-	// $scope.$watch('getCurrentUser()', function(me) {
-	// 	if(me)
-	// 		$location.path('eventos');
-	// })
+	$scope.$watch('getCurrentUser()', function(me) {
+		if(me)
+			$location.path('eventos');
+	})
 
 	// $scope.auth = function() {
 
