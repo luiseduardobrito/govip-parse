@@ -37,7 +37,7 @@ PaymentCloud.prototype.create = function(request, response) {
 	}
 
 	catch(e) {
-		return response.error(e);
+		return response.error(e.message || e.toString());
 	}
 };
 
