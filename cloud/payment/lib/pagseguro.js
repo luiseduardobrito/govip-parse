@@ -2,6 +2,8 @@ var x2js = require('cloud/payment/lib/xml2json.js');
 
 var PagSeguroModule = function(config) {
 
+	console.log("pagseguro module init");
+
 	if(config.email) {
 		throw new Error("PagSeguro store email config undefined");
 	}
