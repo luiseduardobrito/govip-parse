@@ -75,7 +75,7 @@ PagSeguroModule.prototype.send = function(fn) {
 		method: 'POST',
 		url: "https://ws.pagseguro.uol.com.br/v2/checkout?email=" + this.email + "&token=" + this.token,
 
-		body:  this.xml + json2xml_str({
+		body:  this.xml + x2js.json2xml_str({
 			checkout: this.obj
 		}),
 
