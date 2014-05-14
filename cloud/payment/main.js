@@ -15,7 +15,7 @@ PaymentCloud.prototype.create = function(request, response) {
 		console.log(1);
 
 		// Create new payment gateway
-		var gateway = new Gateway();	
+		var gateway = new Gateway("pagesguro");	
 
 		console.log(2);
 
