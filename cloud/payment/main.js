@@ -12,8 +12,12 @@ PaymentCloud.prototype.create = function(request, response) {
 
 	try {
 
+		console.log(1);
+
 		// Create new payment gateway
 		var gateway = new Gateway();	
+
+		console.log(2);
 
 		// Get order information
 		var query = new Parse.Query(Order);
@@ -21,16 +25,23 @@ PaymentCloud.prototype.create = function(request, response) {
 
 			success: function(order) {
 
+				console.log(3);
+
 				// Prepare order information
 				gateway.setOrder(order);
 
+				console.log(4);
+
 				// Send the information and get the result
 				gateway.send(function(err, res) {
+
+					console.log(5);
 					return response.success();
 				});
 			},
 
 			error: function(error) {
+				console.log(6);
 				response.error(error);
 			}
 		});
