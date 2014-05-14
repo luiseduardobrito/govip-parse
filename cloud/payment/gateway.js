@@ -3,12 +3,15 @@ var config = require('cloud/payment/config.js');
 
 var PaymentGatewayCloud = function(g) {
 
+	console.log("payment gateway init");
 	g = g || "pagseguro";
 
 	// Check config gateway
 	if(g.toLowerCase() !== "pagseguro") {
 		throw new Error("Only PagSeguro gateway currently supported");
 	}
+
+	console.log("starting pagseguro module...");
 
 	// Create new gateway instance
 	this.gateway = new PagSeguro({
