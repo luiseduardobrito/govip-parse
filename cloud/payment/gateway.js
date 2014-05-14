@@ -1,10 +1,12 @@
 var PagSeguro = require('cloud/payment/lib/pagseguro.js');
 var config = require('cloud/payment/config.js');
 
-var PaymentGatewayCloud = function() {
+var PaymentGatewayCloud = function(g) {
+
+	g = g || "pagseguro";
 
 	// Check config gateway
-	if( g.toLowerCase() !== "pagseguro") {
+	if(g.toLowerCase() !== "pagseguro") {
 		throw new Error("Only PagSeguro gateway currently supported");
 	}
 
