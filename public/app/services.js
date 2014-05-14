@@ -293,12 +293,35 @@ Services('$event', ['$Parse', '$item', function($Parse, $item){
 Services('$order', ['$Parse', function($Parse) {
 
 	var Order = $Parse.Object.extend('Order', {
-		
+
 	}, {
+
+		create: function(opt, fn) {
+
+			opt = opt || function(){};
+			var order = new Order();
+
+			order.save({
+				buyer: opt.buyer,
+				items: opt.items,	
+				total: opt.total
+			}, {
+
+				success: function(order) {
+					(fn.success ? fn.success(order) : fn(null, order));
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(error));
+				}
+			});
+		},
 
 		place: function(order, fn) {
 
 			$Parse.Cloud.run('paymentGateway', {
+				order: order.id
+			}, {
 
 				success: function(payemnt) {
 					fn(null, payment);

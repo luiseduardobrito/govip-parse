@@ -1,11 +1,12 @@
-var Gateway = require('cloud/payment/gateway');
+var Gateway = require('cloud/payment/gateway.js');
+var Order = require('cloud/order/model.js');
 
 var PaymentCloud = function(){}
 
 PaymentCloud.prototype.create = function(request, response) {
 
 	// Check order field
-	if (!request.object.get("order")) {
+	if (!request.params.order) {
 		return response.error("You have to specify the order");
 	}
 
@@ -14,15 +15,25 @@ PaymentCloud.prototype.create = function(request, response) {
 		// Create new payment gateway
 		var gateway = new Gateway();	
 
-		// Prepare order information
-		gateway.setOrder(request.object.get("order"));
+		// Get order information
+		var query = new Parse.Query(Order);
+		query.get(request.params.order, {
 
-		// Send the information and get the result
-		gateway.send(function(err, res) {
-			return response.success();
+			success: function(order) {
+
+				// Prepare order information
+				gateway.setOrder(order);
+
+				// Send the information and get the result
+				gateway.send(function(err, res) {
+					return response.success();
+				});
+			},
+
+			error: function(error) {
+				response.error(error);
+			}
 		});
-
-		user.get('name')
 	}
 
 	catch(e) {

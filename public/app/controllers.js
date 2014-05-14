@@ -339,7 +339,7 @@ Controllers('ListCtrl', ['$scope', '$user', '$event', '$location', function($sco
 	}
 }]);
 
-Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$location', '$user', function($scope, $routeParams, $evnt, $item, $location, $user) {
+Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$location', '$user', '$order', function($scope, $routeParams, $evnt, $item, $location, $User, $Order) {
 
 	// Scope attributes
 	$scope.cart = [];
@@ -348,7 +348,7 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 
 	$scope.info = {
 		attendee: {
-			name: $user.me().get('name'),
+			name: $User.me().get('name'),
 		},
 		evnt: {},
 		item: {}
@@ -458,6 +458,44 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 				item: ($scope.items && $scope.items.length ? $scope.items[0] : {})
 			}
 		}
+	}
+
+	$scope.placeCart = function() {
+
+		var cart = $scope.cart;
+		var me = $User.me();
+
+		$Order.create({
+
+			buyer: me,
+			items: cart,
+			total: $scope.getCartToral()
+
+		}, {
+
+			success: function(order) {
+
+				console.log(order);
+
+				$Order.place(order, {
+
+					success: function(payment) {
+						console.log(payment);
+						alert("Sucesso!");
+					},
+
+					error: function(error) {
+						console.error(error);
+						alert("Erro!");
+					}
+				});
+			},
+
+			error: function(error) {
+				console.error(error);
+				alert("Erro!");
+			}
+		});
 	}
 
 	$evnt.findById($routeParams.id, {
