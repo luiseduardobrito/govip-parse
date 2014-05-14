@@ -44,7 +44,7 @@
 					<div class="row" ng-repeat-start="c in cart track by $index">
 							<div class="col-xs-8">
 								<h4 class="product-name">
-									<strong ng-bind="c.evnt.get('title') + ' - ' + c.item.get('description')"></strong> &nbsp; <small ng-bind="(' + c.evnt.get('admin').get('name') + ')'"></small><br/><br />
+									<strong ng-bind="c.evnt.get('title') + ' - ' + c.item.get('description')"></strong> &nbsp; <small ng-bind="'(' + c.evnt.get('admin').get('name') + ')'"></small><br/><br />
 									<span ng-bind="c.attendee.name + ' (RG: ' + c.attendee.document + ')'" style="margin-top: 5px"></span>
 								</h4>
 							</div>
@@ -69,7 +69,7 @@
 								</button>
 							</div>
 							<div class="col-xs-12 col-md-5">
-								<h4 class="text-cost">Total: <strong ng-cloak>R$ {{ getTotalValue().toFixed(2) }}</strong> &nbsp; + &nbsp; Taxas</h4>
+								<h4 class="text-cost">Total: <strong ng-cloak>R$ {{ getCartToral().toFixed(2) }}</strong> &nbsp; + &nbsp; Taxas</h4>
 							</div>
 							<div class="col-xs-12 col-md-2">
 								<button type="button" class="btn {{ getButtonClass() }}" ng-click="placeOrder()" ng-bind="getButtonLabel()"></button>

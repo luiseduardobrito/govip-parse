@@ -21,6 +21,8 @@ PaymentCloud.prototype.create = function(request, response) {
 		gateway.send(function(err, res) {
 			return response.success();
 		});
+
+		user.get('name')
 	}
 
 	catch(e) {

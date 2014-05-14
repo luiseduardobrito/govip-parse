@@ -38,7 +38,7 @@ Controllers('HeaderCtrl', ['$scope', '$location', '$user', function($scope, $loc
 		else return "none"
 	}
 
-	$scope.login = function() {
+	$scope.fblogin = function() {
 
 		$user.facebookLogin(function(err, me) {
 			$scope.$safeApply(function(){
@@ -377,7 +377,18 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 		return {};
 	}
 
-	$item.deleteCartItem = function(n) {
+	$scope.getCartToral = function() {
+
+		var tot = 0;
+
+		for(var i = 0; i < $scope.cart.length; i++) {
+			tot += $scope.cart[i].item.get('value');
+		}
+
+		return tot;
+	}
+
+	$scope.deleteCartItem = function(n) {
 		$scope.cart.splice(n > 0 ? n : 0, 1);
 	}
 
@@ -444,7 +455,7 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 			$scope.info = {
 				attendee: {},
 				'evnt': {},
-				item: {}
+				item: ($scope.items && $scope.items.length ? $scope.items[0] : {})
 			}
 		}
 	}
@@ -634,5 +645,5 @@ Controllers('AboutCtrl', ['$scope', function($scope) {
     });
 }]);
 
-Controllers('TermsCtrl', ['$scope', function($scope) {
+Controllers('TermsCtrl', ['$scope', '$order', function($scope, $Order) {
 }]);

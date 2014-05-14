@@ -291,7 +291,29 @@ Services('$event', ['$Parse', '$item', function($Parse, $item){
 }]);
 
 Services('$order', ['$Parse', function($Parse) {
-	return $Parse.Object.extend('Order');
+
+	var Order = $Parse.Object.extend('Order', {
+		
+	}, {
+
+		place: function(order, fn) {
+
+			$Parse.Cloud.run('paymentGateway', {
+
+				success: function(payemnt) {
+					fn(null, payment);
+				},
+
+				error: function(error) {
+					fn(error);
+				}
+			})
+		}
+
+	});
+
+	return Order;
+
 }]);
 
 Services('$ticket', ['$Parse', function($Parse) {
