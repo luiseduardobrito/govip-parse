@@ -1,4 +1,4 @@
-var x2js = require('cloud/payment/lib/xml2json.js');
+//var x2js = require('cloud/payment/lib/xml2json.js');
 
 var PagSeguroModule = function(config) {
 
