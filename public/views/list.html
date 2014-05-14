@@ -1,0 +1,33 @@
+<section class="section offset-header" style="margin-bottom: 75px">
+	<div class="container">
+		<div class="element-table element-column row text-center">
+			<div class="event col-sm-3 col-lg-3 clearfix" ng-repeat="event in events | orderBy : 'date' ">
+				<div class="event-name">
+					<h3 class="event-title" ng-bind="event.title"></h3>
+					<spam ng-bind="event.user.name"></spam>
+				</div>
+				<ul>					
+					<li class="event-feature">
+						<b>Local: </b>
+						<span ng-bind="event.location"></span><br />
+						<b>Data: </b>
+						<span ng-bind="event.displayDate"></span>
+					</li>
+					<li class="event-feature" ng-bind="event.simpleDescription"></li>
+					
+					<ul class="clearfix">
+						<li ng-if="event.available" class="event-feature event-btns">
+							<a href="javascript:void(0);" class="btn btn-buy pull-left" ng-click="goCart(event)"><span class="fa fa-shopping-cart"></span>Comprar</a>
+							<a ng-href={{event.url}} target="_blank" class="btn btn-detail pull-right"><span class="fa fa-plus"></span>Detalhes</a>
+						</li>
+
+						<li ng-if="!event.available" class="event-feature">
+							<a href="javascript:void(0);" class="btn btn-wait pull-left"><span class="fa fa-calendar"></span>Em Breve</a>
+							<a ng-href={{event.url}} target="_blank" class="btn btn-detail pull-right"><span class="fa fa-plus"></span>Detalhes</a>
+						</li>
+					</ul>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
