@@ -195,6 +195,7 @@ Services('$item', ['$Parse', function($Parse) {
 
 			var query = new $Parse.Query(Item);
 			query.equalTo('event', e);
+			query.include("event");
 
 			query.find({
 
@@ -260,6 +261,23 @@ Services('$event', ['$Parse', '$item', function($Parse, $item){
 
 				success: function(results) {
 					(fn.success ? fn.success(results) : fn(null, results));
+				},
+
+				error: function(error) {
+					(fn.error ? fn.error(error) : fn(error));
+				}
+			});
+		},
+
+		findById: function(id, fn) {
+
+			var query = new Parse.Query(Event);
+
+			query.include("admin");
+			query.get(id, {
+
+				success: function(e) {
+					(fn.success ? fn.success(e) : fn(null, e));
 				},
 
 				error: function(error) {

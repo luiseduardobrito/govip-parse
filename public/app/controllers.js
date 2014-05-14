@@ -220,8 +220,8 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 			},
 
 			error: function(err) {
-				console.log(err);
 				alert("Erro!");
+				console.error(err);
 			}
 		});
 	}
@@ -248,8 +248,8 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 			},
 
 			error: function(err) {
-				console.log(err);
 				alert("Erro!")
+				console.error(err);
 			}
 		})
 	}
@@ -268,7 +268,7 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 
 				error: function(error) {
 					alert("Erro!");
-					console.log(error);
+					console.error(error);
 				}
 			});
 		}
@@ -282,82 +282,188 @@ Controllers('AuthCtrl', ['$scope', '$user', '$location', function($scope, $user,
 		if(me)
 			$location.path('eventos');
 	})
+}]);
 
-	// $scope.auth = function() {
+Controllers('ListCtrl', ['$scope', '$user', '$event', '$location', function($scope, $user, $event, $location) {
 
-	// 	$user.login({
+	$scope.safeApply = function(fn) {
 
-	// 		email: $scope.email, 
-	// 		password: $scope.password
+		var phase = this.$root.$$phase;
 
-	// 	}, function(err, me) {
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	};
 
-	// 		if(err) {
-	// 			alert("Informações inválidas");
-	// 		}
+	$event.getList({
 
-	// 		else {
+		success: function(list) {
+
+			$scope.safeApply(function(){
+
+				$scope.events = [];
 				
-	// 			$scope.$safeApply(function() {
-	// 				$location.path('eventos');
-	// 			});
-	// 		}
-	// 	});
-	// }
+				for(var i = 0; i < list.length; i++) {
 
-	// $scope.signup = function() {
+					var pos = $scope.events.push(list[i].attributes) - 1;
 
-	// 	$user.signup({
+					$scope.events[pos].displayDate = list[i].getDisplayDate();
+					$scope.events[pos].id = list[i].id;
 
-	// 		name: $scope.signup_name + ' ' + $scope.signup_lastname,
-	// 		email: $scope.signup_email, 
-	// 		password: $scope.signup_password
+					$scope.events[pos].available = list[i].isAvailable({
+						success: function(result) {
+							$scope.safeApply(function(){
+								$scope.events[pos].available = result;
+							})
+						},
+						error: function(err) {
+							console.error(err)
+						}
+					});
+				}
+			})
+		},
 
-	// 	}, function(err, me) {
+		error: function(error) {
+			alert("Erro!");
+			console.error(error);
+		}
+	})
 
-	// 		if(err) {
-	// 			alert("Informações inválidas");
-	// 		}
-
-	// 		else {
-
-	// 			$scope.$safeApply(function() {
-	// 				$location.path('eventos');
-	// 			})
-	// 		}
-	// 	});
-	// }
+	$scope.goCart = function(currentEvent) {
+		$location.path('carrinho/'+ currentEvent.id);
+	}
 }]);
 
-Controllers('AboutCtrl', ['$scope', function($scope) {
+Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$location', '$user', function($scope, $routeParams, $evnt, $item, $location, $user) {
 
-	 /* Animate elements in #story */
-    $('#story .content').css('opacity', 0).one('inview', function(event, isInView) {
-        if (isInView) {$(this).addClass('animated fadeInLeft delayp1');}
-    });
-    
-    $('#story .member').css('opacity', 0).one('inview', function(event, isInView) {
-        if (isInView) {$(this).addClass('animated fadeInRight delayp2');}
-    });
-}]);
+	// Scope attributes
+	$scope.cart = [];
 
-Controllers('TermsCtrl', ['$scope', function($scope) {
-}]);
+	$scope.items = $scope.evnt = {}
 
-Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$order', '$location', '$user', function($scope, $routeParams, $event, $order, $location, $user) {
+	$scope.info = {
+		attendee: {
+			name: $user.me().get('name'),
+		},
+		evnt: {},
+		item: {}
+	}
 
-	// $scope.safeApply = function(fn) {
+	$scope.safeApply = function(fn) {
 
-	// 	var phase = this.$root.$$phase;
+		var phase = this.$root.$$phase;
 
-	// 	if(phase == '$apply' || phase == '$digest') {
-	// 		if(fn && (typeof(fn) === 'function')) {
-	// 			fn();
-	// 		}
-	// 	} else {
-	// 		this.$apply(fn);
-	// 	}
-	// };
+		if(phase == '$apply' || phase == '$digest') {
+			if(fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+	};
+
+	$scope.getInfoItem = function() {
+
+		for(var i = 0; i < $scope.items.length; i++) {
+			if($scope.items[i].id === $scope.info.item)
+				return $scope.items[i];
+		}
+
+		return {};
+	}
+
+	$item.deleteCartItem = function(n) {
+		$scope.cart.splice(n > 0 ? n : 0, 1);
+	}
+
+	$scope.getItemsFromEvent = function(e, fn) {
+
+		fn = fn || function(){};
+
+		$item.findByEvent(e, {
+
+			success: function(items) {
+				$scope.safeApply(function() {
+					$scope.items = items;
+					$scope.info.item = items[0].id;
+				});
+			},
+
+			error: function(err) {
+				alert("Erro!");
+				console.error(err);
+			}
+		});
+	}
+
+	$scope.addToCart = function() {
+		var info = $scope.info;
+		info.n = $scope.cart.length;
+		info.evnt = $scope.evnt;
+
+		if(!info) {
+			alert("Informações do ingresso inválidas");
+			console.error("info is not defined")
+			return;
+		}
+
+		else if(!info.item) {
+			alert("Informações do ingresso inválidas");
+			console.error("info.item is not defined")
+			return;
+		}
+
+		else if(!info.evnt) {
+			alert("Informações do ingresso inválidas");
+			console.error("info.evnt is not defined")
+			return;
+		}
+
+		else if(!info.attendee) {
+			alert("Informações do ingresso inválidas");
+			console.error("info.attendee is not defined")
+			return;
+		}
+
+		else if(!info.attendee.name || !info.attendee.document) {
+			alert("Informações do ingresso inválidas");
+			console.error("info.attendee is not defined")
+			return;
+		}
+
+		else {
+
+			info.item = $scope.getInfoItem(info.item);
+			$scope.cart.push(info);
+
+			$scope.info = {
+				attendee: {},
+				'evnt': {},
+				item: {}
+			}
+		}
+	}
+
+	$evnt.findById($routeParams.id, {
+
+		success: function(e) {
+			$scope.safeApply(function(){
+				$scope.evnt = e;
+				$scope.admin = e.get('admin')
+				$scope.getItemsFromEvent(e);
+			});
+		},
+
+		error: function(error) {
+			alert("Erro!");
+			console.error(error);
+		}
+	});
 
 	// $scope.addItemId = null;
 	// $scope.addItem = {};
@@ -512,84 +618,21 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$order', '$locati
 	// });
 }]);
 
-Controllers('ListCtrl', ['$scope', '$user', '$event', '$location', function($scope, $user, $event, $location) {
-
-	$scope.safeApply = function(fn) {
-
-		var phase = this.$root.$$phase;
-
-		if(phase == '$apply' || phase == '$digest') {
-			if(fn && (typeof(fn) === 'function')) {
-				fn();
-			}
-		} else {
-			this.$apply(fn);
-		}
-	};
-
-	$event.getList({
-
-		success: function(list) {
-			$scope.safeApply(function(){
-
-				$scope.events = [];
-				
-				for(var i = 0; i < list.length; i++) {
-
-					var pos = $scope.events.push(list[i].attributes) - 1;
-
-					$scope.events[pos].displayDate = list[i].getDisplayDate();
-
-					$scope.events[pos].available = list[i].isAvailable({
-						success: function(result) {
-							$scope.safeApply(function(){
-								$scope.events[pos].available = result;
-							})
-						},
-						error: function(err) {
-							console.log(err)
-						}
-					});
-				}
-			})
-		},
-
-		error: function(error) {
-			alert("Erro!");
-			console.log(error);
-		}
-	})
-
-	// $event.list(function(err, list) {
-	// 	$scope.safeApply(function(){
-	// 		$scope.list = list;
-	// 		var today = new Date();
-
-	// 		for (var i=0; i < list.length; i++) {
-
-	// 				list[i].displayDate = moment(list[i].date).format("LLL");
-
-	// 			for (var j=0; j < list[i].items.length; j++) {
-					
-	// 				var startDate = new Date(list[i].items[j].startDate);
-	// 				var endDate = new Date(list[i].items[j].endDate);
-
-	// 				if ((startDate <= today) && (endDate >= today)) {
-	// 					list[i].available = true;
-	// 					break;
-	// 				} else {
-	// 					list[i].available = false;
-	// 				}
-	// 			}
-	// 		}
-	// 	})
-	// });
-
-	// $scope.goCart = function(currentEvent) {
-	// 	$location.path('carrinho/'+ currentEvent.id);
-	// }
-}]);
-
 Controllers('SuccessCtrl', ['$scope', function($scope) {
 
+}]);
+
+Controllers('AboutCtrl', ['$scope', function($scope) {
+
+	 /* Animate elements in #story */
+    $('#story .content').css('opacity', 0).one('inview', function(event, isInView) {
+        if (isInView) {$(this).addClass('animated fadeInLeft delayp1');}
+    });
+    
+    $('#story .member').css('opacity', 0).one('inview', function(event, isInView) {
+        if (isInView) {$(this).addClass('animated fadeInRight delayp2');}
+    });
+}]);
+
+Controllers('TermsCtrl', ['$scope', function($scope) {
 }]);
