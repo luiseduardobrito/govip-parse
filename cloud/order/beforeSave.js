@@ -17,14 +17,14 @@ var BeforeSave = function(request, response) {
 		return response.error("You have to specify a valid total value");
 	}
 
-	else if(!request.object.get("items")) {
-		return response.error("You have to specify a valid items list");
+	else if(!request.object.get("attendees")) {
+		return response.error("You have to specify a valid attendees list");
 	}
 
 	else {
 
 		// Set confirmed flag
-		if(request.object.get("closed") === null)
+		if(request.object.get("confirmed") === null)
 			request.object.set("confirmed", false);
 
 		if(request.object.get("closed") === null)

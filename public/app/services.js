@@ -290,7 +290,11 @@ Services('$event', ['$Parse', '$item', function($Parse, $item){
 	return Event;
 }]);
 
-Services('$order', ['$Parse', function($Parse) {
+Services('$attendee', ['$Parse', function($Parse) {
+	return $Parse.Object.extend('Attendee');
+}]);
+
+Services('$order', ['$Parse', '$attendee', function($Parse, $Attendee) {
 
 	var Order = $Parse.Object.extend('Order', {
 
@@ -301,20 +305,50 @@ Services('$order', ['$Parse', function($Parse) {
 			opt = opt || function(){};
 			var order = new Order();
 
-			order.save({
-				buyer: opt.buyer,
-				items: opt.items,	
-				total: opt.total
-			}, {
+			var s = [];
 
-				success: function(order) {
-					(fn.success ? fn.success(order) : fn(null, order));
-				},
+			function createAttendee(opt, callback) {
+				var a = new $Attendee();
+				a.set("name", opt.attendee.name);
+				a.set("document", opt.attendee.document);
+				a.set("item", opt.item);
+				a.set("order", order);
+				a.save({
+					success: function(a) {
+						callback(null, a)
+					},
+					error: function(err) {
+						callback(err);
+					}
+				});
+			}
 
-				error: function(error) {
-					(fn.error ? fn.error(error) : fn(error));
+			for(var i = 0; i < opt.items.length; i++) {
+				s.push(async.apply(createAttendee, opt.items[i]));
+			}
+
+			async.parallel(s, function(err, results){
+
+				if(err) {
+					console.error(err);
 				}
+
+				order.save({
+					buyer: opt.buyer,
+					total: opt.total
+				}, {
+
+					success: function(order) {
+						(fn.success ? fn.success(order, results) : fn(null, order, results));
+					},
+
+					error: function(error) {
+						(fn.error ? fn.error(error) : fn(error));
+					}
+				});
 			});
+
+			return order;
 		},
 
 		place: function(order, fn) {
@@ -323,7 +357,7 @@ Services('$order', ['$Parse', function($Parse) {
 				order: order.id
 			}, {
 
-				success: function(payemnt) {
+				success: function(payment) {
 					fn(null, payment);
 				},
 

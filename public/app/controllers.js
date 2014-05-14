@@ -339,7 +339,11 @@ Controllers('ListCtrl', ['$scope', '$user', '$event', '$location', function($sco
 	}
 }]);
 
-Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$location', '$user', '$order', function($scope, $routeParams, $evnt, $item, $location, $User, $Order) {
+Controllers('OrderCtrl', 
+
+	['$scope', '$routeParams', '$event', '$item', '$location', '$user', '$order', '$attendee',
+
+	function($scope, $routeParams, $evnt, $item, $location, $User, $Order, $Attendee) {
 
 	// Scope attributes
 	$scope.cart = [];
@@ -465,7 +469,7 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 		var cart = $scope.cart;
 		var me = $User.me();
 
-		$Order.create({
+		var _order = $Order.create({
 
 			buyer: me,
 			items: cart,
@@ -473,11 +477,11 @@ Controllers('OrderCtrl', ['$scope', '$routeParams', '$event', '$item', '$locatio
 
 		}, {
 
-			success: function(order) {
+			success: function(order, attendees) {
 
 				console.log(order);
 
-				$Order.place(order, {
+				$Order.place(attendees, order, {
 
 					success: function(payment) {
 						console.log(payment);

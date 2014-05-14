@@ -3,7 +3,7 @@ exports = {
 	gateway: "pagseguro",
 
 	email: "luiseduardo14@gmail.com",
-	token: "XXXXXXXXXXXXXXXX",
+	token: "CBAE367DF9DA4BE7BFF19F192B38EA7C",
 
 	currency: "BRL",
 

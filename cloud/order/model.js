@@ -1,2 +1,1 @@
-var Order = Parse.Object.extend('Order', function() {}, {});
-exports = Order;
+exports = Parse.Object.extend('Order');

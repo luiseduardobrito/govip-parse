@@ -1,6 +1,7 @@
 var x2js = require('cloud/payment/lib/xml2json.js');
+var config = require('cloud/payment/config.js');
 
-var PagSeguroModule = function(config) {
+function PagSeguroModule(config) {
 
 	console.log("pagseguro module init");
 
@@ -17,16 +18,15 @@ var PagSeguroModule = function(config) {
 		this.email = config.email;
 		this.token = config.token;
 
-		this.obj['currency'] = config.currrency;
-
 		config.url = config.url || {};
 
-		this.obj.redirectURL = config.url.redirect;
-		this.obj.notificationURL = config.url.notification;
-
-		this.obj = new Object;
 		this.xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-		
+
+		this.obj = new Object();
+		this.obj['currency'] = config.currrency;		
+		this.obj['redirectURL'] = config.url.redirect;
+		this.obj['notificationURL'] = config.url.notification;
+
 		return this;
 	}
 }
@@ -95,4 +95,7 @@ PagSeguroModule.prototype.send = function(fn) {
 	return;
 }
 
-exports = PagSeguroModule;
+exports = new PagSeguroModule({
+	email: config.email, 
+	token: config.token
+});
