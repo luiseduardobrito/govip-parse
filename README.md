@@ -1,8 +1,11 @@
 ######Início do Projeto: 
 15 de Maio de 2014
 
-######Projeto desenvolvido por: 
+######Desenvolvedores: 
 Luis Eduardo Brito
+
+######Designer:
+André Seiji Tamanaha, Maria Lucia Michelleto
 
 ###GoVip - Parse Main API
 =============
