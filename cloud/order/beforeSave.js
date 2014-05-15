@@ -30,6 +30,9 @@ var BeforeSave = function(request, response) {
 		if(request.object.get("closed") === null)
 			request.object.set("closed", false);
 
+		if(request.object.get("total") == 0)
+			request.error("total cannot be zero");
+
 		// Return result
 		return response.success();
 	}
