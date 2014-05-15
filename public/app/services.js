@@ -351,18 +351,28 @@ Services('$order', ['$Parse', '$attendee', function($Parse, $Attendee) {
 			return order;
 		},
 
-		place: function(order, fn) {
+		place: function(order, attendees, fn) {
+
+			fn = fn || function(){};
+
+			var user = Parse.User.current();
 
 			$Parse.Cloud.run('paymentGateway', {
-				order: order.id
+
+				order: order.id.toString(),
+				buyer: {
+					name: user.get("name"),
+					email: user.get("email")
+				}
+
 			}, {
 
 				success: function(payment) {
-					fn(null, payment);
+					fn.success ? fn.success(payment) : fn(null, payment);
 				},
 
 				error: function(error) {
-					fn(error);
+					fn.error ? fn.error(error) : fn(error);
 				}
 			})
 		}

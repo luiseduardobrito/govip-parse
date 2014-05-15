@@ -28,4 +28,4 @@ var Ticket = Parse.Object.extend("Ticket", {
 	}
 });
 
-exports = Ticket;
+module.exports = Ticket;

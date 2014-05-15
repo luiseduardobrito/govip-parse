@@ -479,9 +479,7 @@ Controllers('OrderCtrl',
 
 			success: function(order, attendees) {
 
-				console.log(order);
-
-				$Order.place(attendees, order, {
+				$Order.place(order, attendees, {
 
 					success: function(payment) {
 						console.log(payment);
