@@ -257,6 +257,7 @@ Services('$event', ['$Parse', '$item', function($Parse, $item){
 			fn = fn || function(){};
 			var query = new Parse.Query(Event);
 
+
 			query.find({
 
 				success: function(results) {
@@ -306,13 +307,19 @@ Services('$order', ['$Parse', '$attendee', function($Parse, $Attendee) {
 			var order = new Order();
 
 			var s = [];
+			var t = 0;
 
 			function createAttendee(opt, callback) {
+
 				var a = new $Attendee();
+
+				t += opt.item.get('value') || 0;
+
 				a.set("name", opt.attendee.name);
 				a.set("document", opt.attendee.document);
 				a.set("item", opt.item);
 				a.set("order", order);
+
 				a.save({
 					success: function(a) {
 						callback(null, a)
@@ -333,9 +340,10 @@ Services('$order', ['$Parse', '$attendee', function($Parse, $Attendee) {
 					console.error(err);
 				}
 
+				order.set('buyer', opt.buyer);
+
 				order.save({
-					buyer: opt.buyer,
-					total: opt.total
+					total: t
 				}, {
 
 					success: function(order) {

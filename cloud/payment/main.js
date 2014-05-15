@@ -9,6 +9,8 @@ var PaymentGateway = function(request, response) {
 	else {
 
 		var user = Parse.User.current();
+		console.log(user)
+		console.log(user.get('token'));
 
 		if(!user || !user.get('token')) {
 			return response.error('unauthorized');
