@@ -4,7 +4,7 @@
 ######Desenvolvedores: 
 Luis Eduardo Brito
 
-######Designer:
+######Designers:
 André Seiji Tamanaha, Maria Lucia Michelleto
 
 ###GoVip - Parse Main API
