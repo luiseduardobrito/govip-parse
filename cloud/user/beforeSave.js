@@ -7,8 +7,12 @@ var token = function() {
 };
 
 var BeforeSave = function(request, response) {
-
+	
 	request.object.set('token', token());
+
+	if(request.object.get('producer') === null)
+		request.object.set('producer', true);
+
 	return response.success();
 }
 
